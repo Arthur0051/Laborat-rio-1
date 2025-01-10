@@ -1,0 +1,35 @@
+========== correntes ==========
+corrente total: 0.028752535496957415
+braço 56: 0.011896551724137928 	 
+braço 234: 0.017352941176470592
+Soma:0.02924949290060852
+
+corrente nominal: 0.02854122621564482
+
+valor fracionário do total: 1.007403651115619 
+valor fracionário da soma dos braços: 1.0248155660731726
+corrente da calibração do resistor de 100: 0.045608519269776875
+
+========== ddp's ==========
+ddp A: 0.2835000000000001
+ddp 56: 0.11729999999999996
+ddp 234: 0.17110000000000003
+========== resistências ==========
+
+r 234: 100.26121765064019
+r 56: 149.3600986630136
+r100 1 = 99.66120524794307
+resistência nominal: 175.1851851851852
+
+
+incerteza da resistência r_234 de 100 ohms: 1.3 %
+incerteza da resistência r_56 de 150 ohms: 1.5 %
+incerteza do ddp do resistor A: 0.0049
+incerteza corrente total: 3.9 %
+
+incerteza do ddp do braço 56: 0.0049
+incerteza da corrente do braço 56: 5.4%
+incerteza do ddp do braço 234: 0.0049
+incerteza da corrente do braço 234: 4.5%
+
+incerteza da soma das correntes: 3.5%
