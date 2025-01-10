@@ -1,0 +1,41 @@
+Resistor A:
+
+A0: 5.00 V A1: 4.765 V
+
+corrente = 0.023825 A
+resistência calibrada: 9.863 ohms
+valor fracionário: 0.986
+
+incerteza da resistência equivalente de 200 ohms: 2%
+incerteza da corrente: 2%
+incerteza da resistência calibrada: 3.5%
+
+Resistor B:
+
+A0: 5.00 V A1: 4.765 V
+
+corrente = 0.023825 A
+resistência calibrada: 0.986 ohms
+valor fracionário: 0.986
+
+incerteza da resistência equivalente de 200 ohms: 2%
+incerteza da corrente: 2%
+incerteza da resistência calibrada: 3.5%
+
+Resistor C:
+
+A0: 5.00 V A1: 4.765 V
+
+corrente = 0.023825 A
+resistência calibrada: 0.986 ohms
+valor fracionário: 0.986
+
+incerteza da resistência equivalente de 200 ohms: 2%
+incerteza da corrente: 2%
+incerteza da resistência calibrada: 3.5%
+
+  
+
+  
+
+  
