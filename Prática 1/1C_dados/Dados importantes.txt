@@ -6,8 +6,12 @@ Soma:0.02924949290060852
 
 corrente nominal: 0.02854122621564482
 
-valor fracionário do total: 1.007403651115619 
-valor fracionário da soma dos braços: 1.0248155660731726
+Corrente total/ corrente nominal: 1.007403651115619 
+corrente total/corrente nominal -1 :  acressimo de 0.74% 
+
+Corrente soma/ corrente nominal: 1.0248155660731726
+Corrente soma/ corrente nominal -1: acressimo de 2.5%
+
 corrente da calibração do resistor de 100: 0.045608519269776875
 
 ========== ddp's ==========
