@@ -3,6 +3,7 @@ Resistor A:
 A0: 5.00 V A1: 4.765 V
 
 corrente = 0.023825 A
+correnhte com valores nominais  = 0.023809523
 resistência calibrada: 9.863 ohms
 resistência calibrada/ resistência nominal  = 0.986 ohms
 valor fracionári: Decréssimo de  1.3% ou - 0.013641133263377347
