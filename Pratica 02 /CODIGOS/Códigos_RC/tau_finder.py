@@ -23,7 +23,13 @@ def encontrar_tau_metodo1(intervalo_inicio, intervalo_fim, df):
     return delta_t
 def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df):
     # Ajuste exponencial
-    pass
+    x = df['Time(s)'].to_numpy()
+    y = df['Time(s)'].to_numpy()
+    p = np.polyfit(x, np.log(y), 1)
+    a = np.exp(p[1])
+    b = p[0]
+    
+    return a
 def encontrar_tau_metodo3(intervalo_inicio, intervalo_fim, df):
     dt = df.at[intervalo_fim, "Time(s)"] -  df.at[intervalo_inicio, "Time(s)"]
     ln_VminVmax = np.log(df.at[intervalo_fim, 'CH2V']/df.at[intervalo_inicio, 'CH2V'])
