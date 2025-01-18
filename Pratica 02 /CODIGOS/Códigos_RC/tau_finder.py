@@ -6,9 +6,9 @@ from scipy.optimize import curve_fit
 
 e = np.exp(1)
 data_path = {'C1': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito1/wave/RigolDS0.csv",
-             'C2': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito2/data0.csv",
-             'C3': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito3/circuito30.csv",
-             'C4': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito4/circuito40.csv"}
+             'C2': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito2/RigolDS0.csv",
+             'C3': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito3/RigolDS0.csv",
+             'C4': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito4/RigolDS0.csv"}
 df_c1 = pd.read_csv(data_path['C1'])
 df_c2 = pd.read_csv(data_path['C2'])
 df_c3 = pd.read_csv(data_path['C3'])
@@ -23,20 +23,30 @@ def encontrar_tau_metodo1(intervalo_inicio, intervalo_fim, df):
     
     delta_t = df.at[id_valor_procurado,'Time(s)'] -df_c1.at[intervalo_inicio,'Time(s)']  
     return delta_t
-def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df, plot = False):
+def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df, plot=False):
     # Ajuste exponencial
-    x = df['Time(s)'].iloc[intervalo_inicio: intervalo_fim +1].to_numpy()
-    y = df['CH2V'].iloc[intervalo_inicio: intervalo_fim +1].to_numpy()
+    x = df['Time(s)'].iloc[intervalo_inicio: intervalo_fim + 1].to_numpy()
+    y = df['CH2V'].iloc[intervalo_inicio: intervalo_fim + 1].to_numpy()
     p = np.polyfit(x, np.log(y), 1)
     a = np.exp(p[1])
     b = p[0]
+
     if plot:
-        plt.plot(x, y, "o")
+        plt.figure(figsize=(8, 5))
+        # Dados experimentais
+        plt.plot(x, y, "o", label="Dados experimentais", color="blue")
+        # Ajuste exponencial
         y_fit = a * np.exp(b * x)
-        plt.plot(x, y_fit, color='red')
+        plt.plot(x, y_fit, color="red", label=f"Ajuste: $y = {a:.2f} e^{{{b:.2f}x}}$")
+        plt.xlabel("Tempo (s)")
+        plt.ylabel("Tensão (V)")
+        plt.title("Ajuste Exponencial")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
 
+    return -1 / b
 
-    return -1/b
 def encontrar_tau_metodo3(intervalo_inicio, intervalo_fim, df):
     dt = df.at[intervalo_fim, "Time(s)"] -  df.at[intervalo_inicio, "Time(s)"]
     ln_VminVmax = np.log(df.at[intervalo_fim, 'CH2V']/df.at[intervalo_inicio, 'CH2V'])
@@ -66,7 +76,7 @@ print('Caso 2')
 
 print(df_c2.head())
 
-R2, C2 = 0, 0
+R2, C2 = 20*10**3, 100*10*(-9)
 max_ddp_id2 = df_c2['CH2V'].idxmax()
 min_ddp_id2 = df_c2['CH2V'].idxmin()
 print(max_ddp_id2)
@@ -83,7 +93,7 @@ print('Caso 3')
 
 print(df_c3.head())
 
-R3, C3 = 0, 0
+R3, C3 = 10*10**3, 200*10**(-9)
 max_ddp_id3 = df_c3['CH2V'].idxmax()
 min_ddp_id3 = df_c3['CH2V'].idxmin()
 print(max_ddp_id3)
@@ -101,7 +111,7 @@ print('Caso 4')
 
 print(df_c4.head())
 
-R4, C4 = 0, 0
+R4, C4 = 10*10**3, 25*10**(-9)
 max_ddp_id4 = 475
 min_ddp_id4 = df_c4['CH2V'].idxmin()
 print(max_ddp_id4)
