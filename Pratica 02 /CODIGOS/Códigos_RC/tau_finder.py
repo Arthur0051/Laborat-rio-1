@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+from matplotlib import pyplot as plt
 
 e = np.exp(1)
 data_path = {'C1': "/home/al.carlos.pereira/Documentos/Laborat-rio-1-main/Pratica 02 /DadosRC/RC-onda quadrada/circuito1/wave/RigolDS0.csv",
@@ -21,15 +22,20 @@ def encontrar_tau_metodo1(intervalo_inicio, intervalo_fim, df):
     
     delta_t = df.at[id_valor_procurado,'Time(s)'] -df_c1.at[intervalo_inicio,'Time(s)']  
     return delta_t
-def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df):
+def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df, plot = False):
     # Ajuste exponencial
-    x = df['Time(s)'].to_numpy()
-    y = df['Time(s)'].to_numpy()
+    x = df['Time(s)'].iloc[intervalo_inicio: intervalo_fim +1].to_numpy()
+    y = df['CH2V'].iloc[intervalo_inicio: intervalo_fim +1].to_numpy()
     p = np.polyfit(x, np.log(y), 1)
     a = np.exp(p[1])
     b = p[0]
-    
-    return a
+    if plot:
+        plt.plot(x, y, "o")
+        y_fit = a * np.exp(b * x)
+        plt.plot(x, y_fit, color='red')
+
+
+    return -1/b
 def encontrar_tau_metodo3(intervalo_inicio, intervalo_fim, df):
     dt = df.at[intervalo_fim, "Time(s)"] -  df.at[intervalo_inicio, "Time(s)"]
     ln_VminVmax = np.log(df.at[intervalo_fim, 'CH2V']/df.at[intervalo_inicio, 'CH2V'])
@@ -107,7 +113,72 @@ print(encontrar_tau_metodo4(R4,C4))
 print('\n','-=-'*10,'\n')
 #--------------------------------------------------
 
+#===================================================================
+#Crescimento========================================================
+#===================================================================
 
+# Vamos econtrar ums subida olhadno os gráficos
+intervalo_dir = 490
+intervalo_esq = 857
+min_ddp_sid1 = df_c1['CH2V'].iloc[490: 875+1].idxmin()
+max_ddp_sid1 = df_c1['CH2V'].iloc[490: 875+1].idxmax()
+
+
+def encontrar_tau_método1_cresce(intervalo_inicio, intervalo_fim, df, min_idx, max_idx):
+    # Encontra a tensão no intervalo definido
+    tensao = df['CH1V'].loc[min_idx:max_idx].idxmax()
+    print(tensao)
+    
+    valor_procurado = -df.at[tensao,'CH1V'] / (1 - e)  # Certifique-se de importar numpy como np
+    print(valor_procurado)
+   
+    intervalo = df['CH2V'].iloc[min_idx:max_idx + 1]
+    diferença = (intervalo - valor_procurado).abs()
+    id_valor_procurado = diferença.idxmin()
+    
+    # Calcula delta_t
+    delta_t = df.at[id_valor_procurado, 'Time(s)'] - df.at[intervalo_inicio, 'Time(s)']
+    return delta_t
+def encontrar_tau_metodo2_crescimento(intervalo_inicio, intervalo_fim, df, plot=False):
+    # Dados no intervalo
+    x = df['Time(s)'].iloc[intervalo_inicio:intervalo_fim + 1].to_numpy()
+    y = df['CH2V'].iloc[intervalo_inicio:intervalo_fim + 1].to_numpy()
+
+    # Transformação para ajuste linear
+    y_transformado = np.log(1 - y / y.max())  # Transformação para ajuste linear
+    p = np.polyfit(x, y_transformado, 1)
+    b = p[0]  # Inclinação da reta ajustada
+    tau = -1 / b  # Tau é o inverso da inclinação negativa
+
+    if plot:
+        plt.figure(figsize=(8, 6))
+        plt.scatter(x, y, label="Dados Experimentais", color="blue")
+        
+        # Recria a curva ajustada
+        y_fit = y.max() * (1 - np.exp(-x / tau))
+        plt.plot(x, y_fit, color="red", label=f"Ajuste: τ = {tau:.4f}")
+        
+        plt.xlabel("Tempo (s)")
+        plt.ylabel("Tensão (V)")
+        plt.title("Ajuste Exponencial para Crescimento")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+    return tau
+
+
+
+# Uso da função corrigida
+delta_t = encontrar_tau_método1_cresce(490, 875, df_c1, min_ddp_sid1, max_ddp_sid1)
+print(delta_t)
+
+
+
+
+plt.plot(df_c1['Time(s)'].iloc[min_ddp_sid1: max_ddp_sid1+1],  df_c1['CH2V'].iloc[min_ddp_sid1: max_ddp_sid1+1])
+
+plt.show()
 
 def salvar_em_txt(nome_arquivo, conteudo):
     caminho_completo = os.path.join('/home/al.carlos.pereira/Documentos/Laborat-rio-1-main/Pratica 02 /DadosRC/RC-onda quadrada', nome_arquivo)
@@ -176,4 +247,6 @@ Tau Método 4: {dados['tau_metodo_4']}
 
 # Chamada da função com suas variáveis
 salvar_resultados(df_c1, df_c2, df_c3, df_c4, R1, C1, R2, C2, R3, C3, R4, C4)
+
+
 
