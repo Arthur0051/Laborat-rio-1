@@ -6,15 +6,12 @@ from scipy.optimize import curve_fit
 
 e = np.exp(1)
 
-# Base directory where your data files are located
-base_dir = "Dados (csv)"
-
 # Dictionary with portable file paths
 data_path = {
-    'C1': os.path.join(base_dir, "RC - Circuito 1.csv"),
-    'C2': os.path.join(base_dir, "RC - Circuito 2.csv"),
-    'C3': os.path.join(base_dir, "RC - Circuito 3.csv"),
-    'C4': os.path.join(base_dir, "RC - Circuito 4.csv")
+    'C1': "ZIP_FINAL/Dados (csv)/RC - Circuito 1.csv",
+    'C2': "ZIP_FINAL/Dados (csv)/RC - Circuito 2.csv",
+    'C3': "ZIP_FINAL/Dados (csv)/RC - Circuito 3.csv",
+    'C4': "ZIP_FINAL/Dados (csv)/RC - Circuito 4.csv"
 }
 
 # Print the paths to check
