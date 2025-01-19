@@ -5,9 +5,9 @@ from scipy.optimize import curve_fit
 
 # Definir os caminhos para os arquivos de dados
 data_path = {
-    'C0': "Pratica 02 /ZIP_FINAL/Dados (csv)/RLC - 0 Ohm.csv", 
-    'C300': "Pratica 02 /ZIP_FINAL/Dados (csv)/RLC - 300 Ohm.csv", 
-    'C600': "Pratica 02 /ZIP_FINAL/Dados (csv)/RLC - 600 Ohm.csv"
+    'C0': "ZIP_FINAL/Dados (csv)/RLC - 0 Ohm.csv", 
+    'C300': "ZIP_FINAL/Dados (csv)/RLC - 300 Ohm.csv", 
+    'C600': "ZIP_FINAL/Dados (csv)/RLC - 600 Ohm.csv"
 }
 
 # Carregar os dados
