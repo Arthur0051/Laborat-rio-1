@@ -4,13 +4,10 @@ import os
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 
-# Base directory for the data files
-base_dir = "Dados (csv)"
-
 # Dictionary with portable file paths
 data_path = {
-    'C3': os.path.join(base_dir, "RL - 3Ind.csv"),
-    'C5': os.path.join(base_dir, "RL - 5Ind.csv")
+    'C3': "ZIP_FINAL/Dados (csv)/RL - 3Ind.csv",
+    'C5': "ZIP_FINAL/Dados (csv)/RL - 5Ind.csv"
 }
 
 df_3, df_5 = pd.read_csv(data_path['C3']), pd.read_csv(data_path['C5'])
