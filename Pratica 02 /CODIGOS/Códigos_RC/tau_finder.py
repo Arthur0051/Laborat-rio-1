@@ -15,15 +15,18 @@ df_c3 = pd.read_csv(data_path['C3'])
 df_c4 = pd.read_csv(data_path['C4'])
 
 def encontrar_tau_metodo1(intervalo_inicio, intervalo_fim, df):
-    # Método 1 consiste em procurar o ponto V_inicial/e
-    valor_procurado = df.at[intervalo_inicio,'CH2V']/ e
-    intervalo = df['CH2V'].iloc[intervalo_inicio: intervalo_fim +1]
-    diferença = (intervalo - valor_procurado).abs()
-    id_valor_procurado = diferença.idxmin()
+    # Método 1: encontra o ponto onde V = V_inicial / e
+    valor_procurado = df.at[intervalo_inicio, 'CH2V'] / e
+    intervalo = df['CH2V'].iloc[intervalo_inicio: intervalo_fim + 1]
     
-    delta_t = df.at[id_valor_procurado,'Time(s)'] -df_c1.at[intervalo_inicio,'Time(s)']  
+    # Calcula a diferença absoluta e encontra o índice do valor mais próximo
+    id_valor_procurado = (intervalo - valor_procurado).abs().idxmin()
+
+    # Calcula delta_t usando o tempo correspondente ao índice encontrado
+    delta_t = df.at[id_valor_procurado, 'Time(s)'] - df.at[intervalo_inicio, 'Time(s)']
+    
     return delta_t
-def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df, plot=False):
+def encontrar_tau_metodo2(intervalo_inicio, intervalo_fim, df, plot=True):
     # Ajuste exponencial
     x = df['Time(s)'].iloc[intervalo_inicio: intervalo_fim + 1].to_numpy()
     y = df['CH2V'].iloc[intervalo_inicio: intervalo_fim + 1].to_numpy()
@@ -60,23 +63,30 @@ print('Caso 1')
 print(df_c1.head())
 
 R1, C1 = 10*10**3, 100*10**(-9) 
+
+#cortando a base de dadoos
+
+
+
 max_ddp_id1 = df_c1['CH2V'].idxmax()
 min_ddp_id1 = df_c1['CH2V'].idxmin()
-print(max_ddp_id1 )
-print(min_ddp_id1 )
+print(max_ddp_id1)
+print(min_ddp_id1)
+
 
 print(encontrar_tau_metodo1(max_ddp_id1,min_ddp_id1, df_c1))
 print(encontrar_tau_metodo2(max_ddp_id1,min_ddp_id1, df_c1))
 print(encontrar_tau_metodo3(max_ddp_id1,min_ddp_id1, df_c1))
 print(encontrar_tau_metodo4(R1,C1))
 print('\n','-=-'*10,'\n')
+capacitor_calibrado_m1 = encontrar_tau_metodo1(max_ddp_id1, min_ddp_id1, df_c1) / R1
 #--------------------------------------------------
 print('Caso 2')
 #Caso 2
 
 print(df_c2.head())
 
-R2, C2 = 20*10**3, 100*10*(-9)
+R2, C2 = 20*10**3, 100*10**(-9)
 max_ddp_id2 = df_c2['CH2V'].idxmax()
 min_ddp_id2 = df_c2['CH2V'].idxmin()
 print(max_ddp_id2)
@@ -111,7 +121,7 @@ print('Caso 4')
 
 print(df_c4.head())
 
-R4, C4 = 10*10**3, 25*10**(-9)
+R4, C4 = 10*10**3, 50*10**(-9)
 max_ddp_id4 = 475
 min_ddp_id4 = df_c4['CH2V'].idxmin()
 print(max_ddp_id4)
@@ -122,6 +132,8 @@ print(encontrar_tau_metodo2(max_ddp_id1,min_ddp_id1, df_c2))
 print(encontrar_tau_metodo3(max_ddp_id1,min_ddp_id1, df_c2))
 print(encontrar_tau_metodo4(R4,C4))
 print('\n','-=-'*10,'\n')
+
+
 #--------------------------------------------------
 
 #===================================================================
@@ -180,8 +192,53 @@ def encontrar_tau_metodo2_crescimento(intervalo_inicio, intervalo_fim, df, plot=
         plt.show()
 
     return tau
+
+# Função para calcular e imprimir os resultados de cada caso
+def calcular_capacitor_calibrado(df, R, C, max_ddp_id, min_ddp_id, caso):
+    print(f'Caso {caso}')
+    print(df.head())
+    print(f'Máximo índice: {max_ddp_id}, Mínimo índice: {min_ddp_id}')
+    
+    # Calcular tau para os diferentes métodos
+    tau1 = encontrar_tau_metodo1(max_ddp_id, min_ddp_id, df)
+    tau2 = encontrar_tau_metodo2(max_ddp_id, min_ddp_id, df)
+    tau3 = encontrar_tau_metodo3(max_ddp_id, min_ddp_id, df)
+    tau4 = encontrar_tau_metodo4(R, C)
+    
+    # Calcular o capacitor calibrado para cada método
+    capacitor_calibrado_m1 = tau1 / R
+    capacitor_calibrado_m2 = tau2 / R
+    capacitor_calibrado_m3 = tau3 / R
+    capacitor_calibrado_m4 = tau4 / R
+    
+    # Imprimir resultados
+    print(f'Tau Método 1: {tau1}, Capacitor Calibrado: {capacitor_calibrado_m1}')
+    print(f'Tau Método 2: {tau2}, Capacitor Calibrado: {capacitor_calibrado_m2}')
+    print(f'Tau Método 3: {tau3}, Capacitor Calibrado: {capacitor_calibrado_m3}')
+    print(f'Tau Método 4: {tau4}, Capacitor Calibrado: {capacitor_calibrado_m4}')
+    print('\n', '-=-' * 10, '\n')
+    
+    return {
+        'tau1': tau1,
+        'tau2': tau2,
+        'tau3': tau3,
+        'tau4': tau4,
+        'capacitor_calibrado_m1': capacitor_calibrado_m1,
+        'capacitor_calibrado_m2': capacitor_calibrado_m2,
+        'capacitor_calibrado_m3': capacitor_calibrado_m3,
+        'capacitor_calibrado_m4': capacitor_calibrado_m4,
+    }
+result_caso1 = calcular_capacitor_calibrado(df_c1, R1, C1, max_ddp_id1, min_ddp_id1, caso=1)
+result_caso2 = calcular_capacitor_calibrado(df_c2, R2, C2, max_ddp_id2, min_ddp_id2, caso=2)
+result_caso3 = calcular_capacitor_calibrado(df_c3, R3, C3, max_ddp_id3, min_ddp_id3, caso=3)
+result_caso4 = calcular_capacitor_calibrado(df_c4, R4, C4, max_ddp_id4, min_ddp_id4, caso=4)
+print(result_caso1)
+print(result_caso2)
+print(result_caso3)
+print(result_caso4)
 # Parte do crescimento para o caso 2
 # Ajuste do intervalo de dados para o caso 2
+
 
 min_ddp_sid1 = df_c1['CH2V'].iloc[490: 875+1].idxmin()
 max_ddp_sid1 = df_c1['CH2V'].iloc[490: 875+1].idxmax()
