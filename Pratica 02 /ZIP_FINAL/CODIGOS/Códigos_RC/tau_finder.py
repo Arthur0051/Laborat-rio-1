@@ -5,10 +5,21 @@ from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 
 e = np.exp(1)
-data_path = {'C1': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito1/wave/RigolDS0.csv",
-             'C2': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito2/RigolDS0.csv",
-             'C3': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito3/RigolDS0.csv",
-             'C4': "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC/RC-onda quadrada/circuito4/RigolDS0.csv"}
+
+# Base directory where your data files are located
+base_dir = "Dados (csv)"
+
+# Dictionary with portable file paths
+data_path = {
+    'C1': os.path.join(base_dir, "RC - Circuito 1.csv"),
+    'C2': os.path.join(base_dir, "RC - Circuito 2.csv"),
+    'C3': os.path.join(base_dir, "RC - Circuito 3.csv"),
+    'C4': os.path.join(base_dir, "RC - Circuito 4.csv")
+}
+
+# Print the paths to check
+print(data_path)
+
 df_c1 = pd.read_csv(data_path['C1'])
 df_c2 = pd.read_csv(data_path['C2'])
 df_c3 = pd.read_csv(data_path['C3'])
@@ -278,7 +289,7 @@ print(encontrar_tau_metodo2_crescimento(min_ddp_sid4, max_ddp_sid4, df_c4, True)
 plt.show()
 
 def salvar_em_txt(nome_arquivo, conteudo):
-    caminho_completo = os.path.join('/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRC', nome_arquivo)
+    caminho_completo = os.path.join('Resultados txt', nome_arquivo)
     with open(caminho_completo, 'w') as f:
         f.write(conteudo)
 

@@ -4,7 +4,14 @@ import os
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 
-data_path = {'C3':'/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRL/Dados 3/RigolDS0.csv', 'C5':'/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRL/Dados 5/RigolDS0.csv'}
+# Base directory for the data files
+base_dir = "Dados (csv)"
+
+# Dictionary with portable file paths
+data_path = {
+    'C3': os.path.join(base_dir, "RL - 3Ind.csv"),
+    'C5': os.path.join(base_dir, "RL - 5Ind.csv")
+}
 
 df_3, df_5 = pd.read_csv(data_path['C3']), pd.read_csv(data_path['C5'])
 
@@ -84,8 +91,8 @@ Razão Tau ajustado / Tau nominal: {tau_3/tau_3_nominal}
 """
 
 # Save to file
-file_path = "/home/carlos/Documentos/Laborat-rio-1/Pratica 02 /DadosRL/ Casos.txt"
-with open(file_path, "w") as f:
+caminho_completo = os.path.join('Resultados txt', 'Dados-RL.txt')
+with open(caminho_completo, "w") as f:
     f.write(results)
 
-print(f"Resultados salvos em {file_path}")
+print(f"Resultados salvos em {caminho_completo}")
