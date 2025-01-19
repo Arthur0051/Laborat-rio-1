@@ -1,0 +1,11 @@
+Resultados para Caso 3 (Indutores):
+Tau (ajustado): 0.0000102716 ± 0.0000004575
+Tau (nominal): 0.0000182309
+Impedância: 127.511758
+Razão Tau ajustado / Tau nominal: 0.563417
+
+Resultados para Caso 5 (Indutores):
+Tau (ajustado): 0.0000146698 ± 0.0000006772
+Tau (nominal): 0.0000241352
+Impedância: 133.669571
+Razão Tau ajustado / Tau nominal: 0.607818
